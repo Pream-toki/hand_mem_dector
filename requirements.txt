@@ -1,0 +1,3 @@
+# Runtime dependencies for Hand Gesture Meme Detector
+mediapipe
+opencv-python
