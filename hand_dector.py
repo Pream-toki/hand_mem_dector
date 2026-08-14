@@ -1,4 +1,6 @@
 import cv2
+from pathlib import Path
+
 import mediapipe as mp
 
 from gesture import detect_gesture
@@ -27,7 +29,7 @@ RunningMode = mp.tasks.vision.RunningMode
 
 options = HandLandmarkerOptions(
     base_options=BaseOptions(
-        model_asset_path="hand_landmarker.task"
+        model_asset_path=str(Path(__file__).with_name("hand_landmarker.task"))
     ),
     running_mode=RunningMode.IMAGE,
     num_hands=1,
