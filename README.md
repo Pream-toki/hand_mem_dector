@@ -1,2 +1,1 @@
-# hand_mem_dector
-can generate meme pic form 3 hand signs 
+Don't forget to install with pip to necessary 
