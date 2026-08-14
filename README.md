@@ -1,220 +1,169 @@
-# 🤚 Hand Gesture Meme Detector
+# Hand Gesture Meme Detector
 
-A Python computer-vision project that uses your webcam to detect hand gestures in real time and display a random meme for the detected gesture.
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?logo=opencv&logoColor=white)](https://opencv.org/)
+[![MediaPipe](https://img.shields.io/badge/MediaPipe-Hand%20Landmarker-00A67E)](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker/python)
 
-The project uses **OpenCV** for webcam processing and **MediaPipe Hand Landmarker** for hand landmark detection.
+A webcam-powered Python project that recognizes hand gestures in real time and responds with a random meme from the matching gesture folder. It combines OpenCV video capture with MediaPipe hand landmarks and a lightweight, rule-based classifier—no custom model training required.
 
-## ✨ Features
+> **Portfolio snapshot:** real-time computer vision, landmark-based gesture classification, local asset management, and a simple interactive desktop experience.
 
-- Real-time webcam hand detection
-- MediaPipe hand landmark detection
-- Rule-based gesture recognition
-- Random meme selection for supported gestures
-- Automatically removes the meme when no hand is detected
-- Project-relative meme folders, so the code does not depend on your personal computer path
+## Features
 
-## 🤚 Supported Gestures
+- Live webcam capture with mirrored preview
+- MediaPipe Hand Landmarker detection for one hand at a time
+- Rule-based recognition for five gestures
+- Random meme selection whenever the recognized gesture changes
+- On-screen landmarks and current gesture label
+- Automatic cleanup of the meme window when no hand is detected
+- Project-relative asset paths, so the project can run from any working directory
 
-| Gesture | Meaning |
-|---|---|
-| ✊ FIST | Closed hand |
-| ☝️ POINTING | Index finger extended |
-| ✌️ PEACE | Index and middle fingers extended |
-| ✋ OPEN HAND | Four fingers extended |
-| 👍 THUMBS UP | Thumb extended upward |
-| ❓ OTHER | Gesture does not match a supported pattern |
+## Supported gestures
 
-## 🛠️ Technologies
+| Gesture | Recognition rule | Meme folder |
+| --- | --- | --- |
+| ✊ FIST | All four fingers folded and thumb not extended | `fist/` |
+| ☝️ POINTING | Index finger extended | `pointing/` |
+| ✌️ PEACE | Index and middle fingers extended | `peace/` |
+| ✋ OPEN HAND | All four fingers extended | `open_hand/` |
+| 👍 THUMBS UP | Thumb extended upward; fingers folded | `thumbs_up/` |
+| ❓ OTHER | Does not match a supported rule | — |
 
-- Python
-- OpenCV
-- MediaPipe
-- Computer Vision
+## Demo and usage
 
-## 📁 Project Structure
+1. Run the application with `python hand_dector.py`.
+2. Allow your webcam to open.
+3. Hold a supported gesture in view.
+4. A random image from its matching folder appears in the **MEME** window.
+
+Press <kbd>Q</kbd> or <kbd>Esc</kbd> to close the application.
+
+## How it works
 
 ```text
-hand_mem_dector/
-│
-├── fist/          # Meme images for FIST
-├── open_hand/     # Meme images for OPEN HAND
-├── peace/         # Meme images for PEACE
-├── pointing/      # Meme images for POINTING
-├── thumbs_up/     # Meme images for THUMBS UP
-│
-├── gesture.py     # Gesture recognition rules
-├── hand_dector.py # Webcam and MediaPipe processing
-├── meme.py        # Random meme selection
-├── hand_landmarker.task
-└── README.md
+Webcam frame
+    │
+    ▼
+OpenCV capture + RGB conversion
+    │
+    ▼
+MediaPipe Hand Landmarker
+    │
+    ▼
+gesture.py: landmark-position rules
+    │
+    ▼
+meme.py: choose a random image for the gesture
+    │
+    ▼
+OpenCV windows: camera preview + meme
 ```
 
-## 💻 Requirements
+The classifier compares finger-tip and joint positions in MediaPipe's normalized hand landmarks. This makes the project compact and easy to experiment with, while avoiding the overhead of collecting and training a custom dataset.
 
-- Python 3.9 or newer
-- A working webcam
-- OpenCV
-- MediaPipe
-- The MediaPipe `hand_landmarker.task` model file
+## Requirements
 
-## 🚀 Installation
+- Python 3.9 or later
+- A webcam available to your operating system
+- The MediaPipe model file: `hand_landmarker.task` in the repository root
 
-### 1. Clone the repository
+Python dependencies are listed in [`requirements.txt`](requirements.txt).
+
+## Installation
 
 ```bash
-git clone https://github.com/Pream-toki/hand_mem_dector.git
+git clone --branch hand_mem_dector https://github.com/Pream-toki/hand_mem_dector.git
 cd hand_mem_dector
+
+python -m venv .venv
 ```
 
-### 2. Create a virtual environment (recommended)
-
-On Windows:
+Activate the environment:
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+
+# macOS / Linux
+source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+Install the dependencies:
 
 ```bash
-pip install opencv-python mediapipe
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-## ▶️ Run the Project
-
-Make sure `hand_landmarker.task` is in the project directory, then run:
+Then start the app:
 
 ```bash
 python hand_dector.py
 ```
 
-A webcam window will open. Show a supported hand gesture to the camera.
+> The entry script is intentionally named `hand_dector.py` to preserve the repository's existing command and avoid breaking current users.
 
-Press **Q** or **Esc** to quit.
+## Add your own memes
 
-## 🧠 How It Works
-
-```text
-Webcam
-   ↓
-OpenCV captures a frame
-   ↓
-MediaPipe detects hand landmarks
-   ↓
-gesture.py checks landmark positions
-   ↓
-A gesture is identified
-   ↓
-meme.py finds a random image
-   ↓
-The meme is displayed
-```
-
-The gesture classifier in `gesture.py` uses landmark positions rather than a custom trained machine-learning model. For example, it compares the positions of finger joints to determine whether fingers are extended.
-
-## 🖼️ Adding Your Own Memes
-
-Put `.jpg`, `.jpeg`, or `.png` images inside the matching gesture folder.
-
-Example:
+Add `.jpg`, `.jpeg`, or `.png` files to the folder for the gesture you want to customize.
 
 ```text
 peace/
-├── meme1.jpg
-├── meme2.png
-└── meme3.jpg
+├── reaction-1.jpg
+├── reaction-2.png
+└── reaction-3.jpeg
 ```
 
-When the PEACE gesture is detected, one of the images in `peace/` is selected randomly.
+Folder names are derived from the gesture label by lowercasing and replacing spaces with underscores. For example, `OPEN HAND` uses `open_hand/`, and `THUMBS UP` uses `thumbs_up/`.
 
-Make sure the folder name matches the gesture after converting it to lowercase and replacing spaces with underscores.
-
-For example:
+## Project structure
 
 ```text
-OPEN HAND  →  open_hand/
-THUMBS UP  →  thumbs_up/
+hand_mem_dector/
+├── fist/                  # Meme images for FIST
+├── open_hand/             # Meme images for OPEN HAND
+├── peace/                 # Meme images for PEACE
+├── pointing/              # Meme images for POINTING
+├── thumbs_up/             # Meme images for THUMBS UP
+├── gesture.py             # Landmark-based gesture rules
+├── hand_dector.py         # Webcam loop and MediaPipe integration
+├── meme.py                # Project-relative random meme selection
+├── hand_landmarker.task   # MediaPipe model asset
+├── requirements.txt       # Python dependencies
+└── README.md
 ```
 
-## 🔧 Customizing Gestures
+## Troubleshooting
 
-The gesture rules are in `gesture.py`.
+| Problem | Suggested fix |
+| --- | --- |
+| Webcam does not open | Close other applications using the camera and confirm your operating system has granted camera access. |
+| `ModuleNotFoundError` | Activate the virtual environment, then run `python -m pip install -r requirements.txt`. |
+| `hand_landmarker.task` cannot be found | Confirm the model file is in the repository root alongside `hand_dector.py`. |
+| No meme appears | Check that the matching gesture folder exists and contains a supported image format (`.jpg`, `.jpeg`, or `.png`). |
+| Gesture is `OTHER` | Improve lighting, keep the hand fully in frame, and face the camera more directly. |
 
-You can modify the conditions or add new gesture patterns using MediaPipe's hand landmarks.
+## Limitations
 
-Possible future gestures include:
+- Detection is configured for one hand.
+- Gesture rules are heuristic; lighting, hand orientation, and camera angle affect results.
+- The project recognizes a small fixed set of gestures.
+- Meme images open in a separate OpenCV window.
+- The MediaPipe model asset must be available locally.
 
-- 🤟 I Love You
-- 🤙 Call Me
-- 👌 OK
-- 🤘 Rock
+## Future improvements
 
-## 🐛 Troubleshooting
+- [ ] Add a screenshot or short demo GIF
+- [ ] Support multiple hands and additional gestures
+- [ ] Add confidence feedback and smoothing between frames
+- [ ] Package the application with a friendlier desktop interface
+- [ ] Add automated tests for the gesture rules
+- [ ] Rename the legacy entry script in a backwards-compatible release
 
-### Webcam does not open
+## Author
 
-Make sure your webcam is connected and is not being used by another application.
+Built by [Pream-toki](https://github.com/Pream-toki).
 
-### `ModuleNotFoundError`
+## License
 
-Install the dependencies again:
-
-```bash
-pip install opencv-python mediapipe
-```
-
-### `hand_landmarker.task` not found
-
-Make sure the model file is located in the same project directory as `hand_dector.py`.
-
-### `Folder not found`
-
-Make sure the required meme folder exists and uses the correct name, such as `peace`, `open_hand`, or `thumbs_up`.
-
-### No meme appears
-
-Make sure the corresponding folder contains at least one `.jpg`, `.jpeg`, or `.png` image.
-
-## ⚠️ Current Limitations
-
-- The project currently processes one hand.
-- Lighting and camera angle can affect detection.
-- Some gestures may be classified as `OTHER`.
-- Gesture recognition uses hand-landmark rules rather than a trained custom classifier.
-- The model file must be present locally.
-
-## 🔮 Future Improvements
-
-- [ ] Add more gestures
-- [ ] Improve gesture accuracy
-- [ ] Support multiple hands
-- [ ] Add a graphical user interface
-- [ ] Add gesture confidence information
-- [ ] Add automated dependency management with `requirements.txt`
-- [ ] Rename `hand_dector.py` to `hand_detector.py`
-- [ ] Add screenshots or a demo GIF
-
-## 📚 What This Project Demonstrates
-
-This project demonstrates practical experience with:
-
-- Python programming
-- OpenCV
-- MediaPipe
-- Computer vision
-- Webcam processing
-- Hand landmark detection
-- Rule-based gesture recognition
-- File and folder handling
-- Git and GitHub
-
-## 👨‍💻 Author
-
-**Pream-toki**
-
-GitHub: https://github.com/Pream-toki
-
-## 📄 License
-
-No open-source license has been specified yet.
+No license has been specified for this repository yet. Add a license before inviting others to reuse or distribute the code.
