@@ -21,3 +21,11 @@ python gesture.py
 ```
 
 Made for learning, so expect rough edges.
+
+## Screenshots
+
+TODO: add screenshots here (drag an image file onto this page on github.com to upload it)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
